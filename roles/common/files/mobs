@@ -1,0 +1,33 @@
+#!/bin/bash
+# A simple backup script wrapper for duplicity. 
+# Inspired from http://www.cyberciti.biz/faq/duplicity-installation-configuration-on-debian-ubuntu-linux/
+# -----------------------------------------------------
+ 
+## Define VARS ##
+_gpg_key='yourgpgkey'
+_target=yourtarget
+_duplicity=$(which duplicity)
+_src=~
+_exclude="${_src}/bin/exclude.list"
+_passphrase="${_src}/.passphrase"
+
+## exit if external disk is not mounted ##
+test -d $_target || (echo "${_target} not found" && exit 0)
+
+## set passphrase fro the gpg key ##
+. $_passphrase 
+export PASSPHRASE
+ 
+## Cleanup ##
+$_duplicity cleanup --force --encrypt-key="${_gpg_key}" file://${_target}
+ 
+## Rotate old backups than 60 days ##
+$_duplicity remove-older-than 60D --encrypt-key="${_gpg_key}" file://${_target}
+ 
+## Backup action ##
+## Note: full backup if older than 30 day else do incremental backup  ##
+$_duplicity ${_src} --encrypt-key="${_gpg_key}" --full-if-older-than 30D \
+    --exclude-filelist="${_exclude}" \
+    file://${_target}
+
+
