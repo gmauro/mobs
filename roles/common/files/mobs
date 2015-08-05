@@ -22,7 +22,7 @@ export PASSPHRASE
 $_duplicity cleanup --force --encrypt-key="${_gpg_key}" file://${_target}
  
 ## Rotate old backups than 60 days ##
-$_duplicity remove-older-than 60D --encrypt-key="${_gpg_key}" file://${_target}
+$_duplicity remove-older-than 60D --force --encrypt-key="${_gpg_key}" file://${_target}
  
 ## Backup action ##
 ## Note: full backup if older than 30 day else do incremental backup  ##
