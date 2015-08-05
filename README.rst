@@ -1,5 +1,5 @@
 Mobs
-----
+====
 
 My own backup strategy, enabled by Ansible.
 
@@ -11,9 +11,9 @@ Requirements
 - duplicity_
 - gpg_
 
--------------
+---------------
 Quick Start
--------------
+---------------
 
 To list your gpg keys, run: 
 
