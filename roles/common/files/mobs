@@ -27,7 +27,7 @@ $_duplicity remove-older-than 60D --force --encrypt-key="${_gpg_key}" file://${_
 ## Backup action ##
 ## Note: full backup if older than 30 day else do incremental backup  ##
 $_duplicity ${_src} --encrypt-key="${_gpg_key}" --full-if-older-than 30D \
-    --exclude-filelist="${_exclude}" \
+    --progress --exclude-filelist="${_exclude}" \
     file://${_target}
 
 
