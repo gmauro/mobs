@@ -1,8 +1,9 @@
 mobs
-====
+----
 
 my own backup strategy, enabled by Ansible.
 
+------------
 Requirements
 ------------
 
@@ -10,6 +11,7 @@ Requirements
 - duplicity_
 - gpg_
 
+-----------
 Quick Start
 -----------
 
