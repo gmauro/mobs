@@ -30,4 +30,8 @@ $_duplicity ${_src} --encrypt-key="${_gpg_key}" --full-if-older-than 30D \
     --progress --exclude-filelist="${_exclude}" \
     file://${_target}
 
+## Report Collection status ##
+$_duplicity collection-status file://${_target}
 
+## Done ##
+echo "Done!"
