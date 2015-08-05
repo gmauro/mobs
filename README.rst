@@ -1,19 +1,19 @@
-mobs
+Mobs
 ----
 
-my own backup strategy, enabled by Ansible.
+My own backup strategy, enabled by Ansible.
 
-------------
+--------------
 Requirements
-------------
+--------------
 
 - ansible_
 - duplicity_
 - gpg_
 
------------
+-------------
 Quick Start
------------
+-------------
 
 To list your gpg keys, run: 
 
