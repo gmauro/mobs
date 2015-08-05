@@ -8,7 +8,7 @@ _gpg_key='yourgpgkey'
 _target=yourtarget
 _duplicity=$(which duplicity)
 _src=~
-_exclude="${_src}/bin/exclude.list"
+_exclude="${_src}/bin/mobs.exclude"
 _passphrase="${_src}/.passphrase"
 
 ## exit if external disk is not mounted ##
