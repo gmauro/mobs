@@ -1,0 +1,66 @@
+- name: Only update apt cache if the last one is more than 3600 seconds ago
+  become: yes
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: ensure required pkgs are installed
+  become: yes
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - cron
+      - duplicity
+      - gpg
+  when: ansible_os_family == "Debian"
+
+- name: Creates local bin directory
+  file:
+    path: "{{ local_bin }}"
+    state: directory
+
+- name: copy backup script into local bin directory
+  copy:
+    src: "{{ backup_script }}"
+    dest: "{{ local_bin }}"
+    mode: 0744
+
+- name: replace strings in the backup script
+  replace:
+    dest: "{{ local_bin }}/{{ backup_script }}"
+    regexp: "{{ item.src}}"
+    replace: "{{ item.dst }}"
+  with_items:
+    - { src: 'yourgpgkey', dst: "{{ gpg_key }}" }
+    - { src: 'yourbackuporigin', dst: "{{ backup_origin }}" }
+    - { src: 'yourbackuptarget', dst: "{{ backup_target }}" }
+    - { src: 'yourlocalbin', dst: "{{ local_bin }}" }
+    - { src: 'yourpassphrase', dst: "{{ passphrase_path }}" }
+
+- name: copy backup exclude list file into local bin directory
+  copy:
+    src: "{{ backup_exclude_list }}"
+    dest: "{{ local_bin }}"
+
+- name: replace path in the backup_exclude_list file
+  replace:
+    dest: "{{ local_bin }}/{{ backup_exclude_list }}"
+    regexp: '^~'
+    replace: "/home/{{ user }}"
+
+- name: create the passphrase file
+  copy:
+    src: passphrase
+    dest: "{{ passphrase_path }}"
+    force: no
+
+# Ensure exists a job that runs at 13 and 18.
+- name: add cron entry for backup 
+  cron:
+    name: "backup"
+    user: "{{ user }}"
+    minute: "{{ minute }}"
+    hour: "{{ hour }}"
+    job: "{{ local_bin }}/{{ backup_script }} > {{ local_bin }}/{{ backup_script }}.log"

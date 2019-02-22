@@ -1,14 +1,13 @@
 # To install, run:
-# $ ansible-playbook site.yml --extra-vars "user=yourlocaluser gpg_key=yourgpgkey backup_target=yourbackuptarget"
+# $ ansible-playbook -i localhost, site.yml [-e "@defaults/main.yml"]
 #
 # To list your gpg keys, run: 
 # $ gpg --list-keys
 #
-- hosts: all
-  remote_user: '{{ user }}'
-  vars:
-    local_bin: ~/bin
-    backup_script: mobs
-    backup_exclude_list: mobs.exclude
-  roles:
-  - common
+
+- hosts: localhost
+  connection: local
+  vars_files:
+    - defaults/main.yml
+  tasks:
+    - include_tasks: tasks/main.yml

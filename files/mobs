@@ -5,11 +5,11 @@
  
 ## Define VARS ##
 _gpg_key='yourgpgkey'
-_target=yourtarget
+_target=yourbackuptarget
 _duplicity=$(which duplicity)
-_src=~
-_exclude="${_src}/bin/mobs.exclude"
-_passphrase="${_src}/.passphrase"
+_src=yourbackuporigin
+_exclude="yourlocalbin/mobs.exclude"
+_passphrase=yourpassphrase
 
 ## exit if external disk is not mounted ##
 test -d $_target || (echo "${_target} not found" && exit 0)
@@ -19,18 +19,22 @@ test -d $_target || (echo "${_target} not found" && exit 0)
 export PASSPHRASE
  
 ## Cleanup ##
+echo "__Cleanup"
 $_duplicity cleanup --force --encrypt-key="${_gpg_key}" file://${_target}
  
 ## Rotate old backups than 60 days ##
+echo "__Rotate"
 $_duplicity remove-older-than 60D --force --encrypt-key="${_gpg_key}" file://${_target}
  
 ## Backup action ##
 ## Note: full backup if older than 30 day else do incremental backup  ##
+echo "__Backup"
 $_duplicity ${_src} --encrypt-key="${_gpg_key}" --full-if-older-than 30D \
     --exclude-filelist="${_exclude}" \
     file://${_target}
 
 ## Report Collection status ##
+echo "__Report Collection status"
 $_duplicity collection-status file://${_target}
 
 ## Done ##

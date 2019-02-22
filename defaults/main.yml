@@ -1,0 +1,13 @@
+backup_script: mobs
+backup_exclude_list: mobs.exclude
+backup_origin: "~"
+backup_target: "yourbackuptarget"
+local_bin: "~/.local/bin"
+
+gpg_key: yourgpgkey
+passphrase_path: "~/.passphrase"
+
+user: yourlocaluser
+
+minute: "7"
+hour: "10,15"
